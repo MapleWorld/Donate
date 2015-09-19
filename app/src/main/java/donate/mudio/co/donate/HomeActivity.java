@@ -42,7 +42,11 @@ public class HomeActivity extends AppCompatActivity {
             editor.apply();
         }
 
+        // Send the gps coordinates to the server
+        // Server return a list of food banks nearby
         String[] stringData = {"a", "b", "c"};
+
+        // Display all the nearby food bank in list view
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 stringData);
         ((ListView) findViewById(R.id.food_bank)).setAdapter(adapter);
@@ -112,7 +116,7 @@ public class HomeActivity extends AppCompatActivity {
                             //editor.putFloat(LATITUDE, (float) location.getLatitude());
                             //editor.putFloat(LONGITUDE, (float) location.getLongitude());
                             //editor.apply();
-                            
+
                             getDialog().dismiss();
                             // Refresh the current page
                             Activity activity = getActivity();
