@@ -28,6 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import donate.mudio.co.donate.R;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -40,7 +42,7 @@ public class UiAutomatorTest {
     private static final long LAUNCH_TIMEOUT = 5000;
     private static final long UI_TIMEOUT = 2500;
 
-    private static final String APP_PACKAGE = MainActivity.class.getPackage().getName();
+    private static final String APP_PACKAGE = "donate.mudio.co.donate";
     private static final String GMS_PACKAGE = "com.google.android.gms";
 
     private static final String CLASS_BUTTON = "android.widget.Button";
@@ -127,7 +129,7 @@ public class UiAutomatorTest {
      */
     private void disconnectTest() {
         // Disconnect button (enabled)
-        String disconnectText = mContext.getString(com.mudio.example.donate.stuff.R.string.disconnect);
+        String disconnectText = mContext.getString(R.string.disconnect);
         BySelector disconnectSelector = By.clazz(CLASS_BUTTON).text(disconnectText).enabled(true);
 
         // Click disconnect button
@@ -135,7 +137,7 @@ public class UiAutomatorTest {
         mDevice.findObject(disconnectSelector).click();
 
         // Check that we get to signed-out state
-        String signedOutText = mContext.getString(com.mudio.example.donate.stuff.R.string.signed_out);
+        String signedOutText = mContext.getString(R.string.signed_out);
         BySelector signedOutTextSelector = By.text(signedOutText);
         assertTrue(mDevice.wait(Until.hasObject(signedOutTextSelector), UI_TIMEOUT));
     }
@@ -147,7 +149,7 @@ public class UiAutomatorTest {
         // Wait until we have an enabled button on screen
         mDevice.wait(Until.hasObject(By.clazz(CLASS_BUTTON).enabled(true)), UI_TIMEOUT);
 
-        String signedInText = mContext.getString(com.mudio.example.donate.stuff.R.string.signed_in_fmt, "");
+        String signedInText = mContext.getString(R.string.signed_in_fmt, "");
         BySelector signedInTextSelector = By.textContains(signedInText);
         return mDevice.wait(Until.hasObject(signedInTextSelector), UI_TIMEOUT);
     }

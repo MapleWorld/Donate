@@ -92,9 +92,9 @@ public class HomeActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             new_location_dialog.show(fm, "location_fragment_dialog");
         } else if(id == R.id.sign_out_button) {
-            if (MainActivity.mGoogleApiClient.isConnected()) {
-                Plus.AccountApi.clearDefaultAccount(MainActivity.mGoogleApiClient);
-                MainActivity.mGoogleApiClient.disconnect();
+            if (LoginActivity.mGoogleApiClient.isConnected()) {
+                Plus.AccountApi.clearDefaultAccount(LoginActivity.mGoogleApiClient);
+                LoginActivity.mGoogleApiClient.disconnect();
             }
         }
         return super.onOptionsItemSelected(item);
