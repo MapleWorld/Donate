@@ -2,13 +2,25 @@ package donate.mudio.co.donate;
 
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,11 +28,28 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location != null)
-        Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
-                Toast.LENGTH_SHORT).show();
+        if (location != null) {
+            Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
+                    Toast.LENGTH_SHORT).show();
+        }
 
+        String[] stringData = {"a", "b", "c"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                stringData);
+        ((ListView) findViewById(R.id.food_bank)).setAdapter(adapter);
+
+        mListView = (ListView) findViewById(R.id.food_bank);
+
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item_name = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getBaseContext(), item_name + " is selected ", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,8 +68,36 @@ public class HomeActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_change_location) {
+            UpdateLocationFragment new_location_dialog = new UpdateLocationFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            new_location_dialog.show(fm, "location_fragment_dialog");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class UpdateLocationFragment extends DialogFragment {
+
+        public UpdateLocationFragment() {
+            // Empty constructor required for DialogFragment
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.location_fragment_dialog, container);
+            final EditText editText = (EditText) view.findViewById(R.id.new_location_text);
+            view.findViewById(R.id.update_location_button)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity(), editText.getText().toString(),
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(HomeActivity.class.getSimpleName(), editText.getText().toString());
+                            getDialog().dismiss();
+                        }
+                    });
+            return view;
+        }
     }
 }

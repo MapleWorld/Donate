@@ -13,6 +13,7 @@
         and that your device has an internet connection.
     </string>
 
+    <string name="action_change_location">Change Location</string>
     <!-- Google Play Services error for Toast -->
     <string name="play_services_error_fmt">Google Play Services Error: %i</string>
 
