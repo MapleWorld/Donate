@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Lonel\Desktop\Donate\app\libs\endpoints-v1-1.20.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ff9ff346125de441378ec0ae9002a9389bf07fac">
+        <dex dex="C:\Users\Lonel\Desktop\Donate\app\build\intermediates\pre-dexed\debug\endpoints-v1-1.20.0-SNAPSHOT-654b070a31b092117b41156576ec38e3482f7f44.jar" />
+    </item>
+
+</items>
