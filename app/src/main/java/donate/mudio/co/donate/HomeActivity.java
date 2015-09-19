@@ -1,5 +1,7 @@
 package donate.mudio.co.donate;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -45,11 +47,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item_name = parent.getItemAtPosition(position).toString();
                 Toast.makeText(getBaseContext(), item_name + " is selected ", Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(HomeActivity.this, FoodBankActivity.class);
+                intent.putExtra("foodBankName", item_name);
+                startActivity(intent);
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +99,10 @@ public class HomeActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             Log.d(HomeActivity.class.getSimpleName(), editText.getText().toString());
                             getDialog().dismiss();
+                            // Refresh the current page
+                            Activity activity = getActivity();
+                            activity.finish();
+                            startActivity(activity.getIntent());
                         }
                     });
             return view;
