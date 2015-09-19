@@ -177,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onConnected:" + bundle);
 
         // Show the signed-in UI
-        updateUI(true);
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        //updateUI(true);
     }
 
     @Override

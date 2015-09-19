@@ -22,4 +22,8 @@
 
     <!-- Content Description for images -->
     <string name="desc_google_icon">Google Logo</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
