@@ -2,6 +2,7 @@ package donate.mudio.co.donate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final String LATITUDE = "LATITUDE";
+    private static final String LONGITUDE = "LONGITUDE";
     private ListView mListView;
 
     @Override
@@ -33,6 +36,10 @@ public class HomeActivity extends AppCompatActivity {
         if (location != null) {
             Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
                     Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putFloat(LATITUDE, (float) location.getLatitude());
+            editor.putFloat(LONGITUDE, (float) location.getLongitude());
+            editor.apply();
         }
 
         String[] stringData = {"a", "b", "c"};
@@ -98,6 +105,14 @@ public class HomeActivity extends AppCompatActivity {
                             Toast.makeText(getActivity(), editText.getText().toString(),
                                     Toast.LENGTH_SHORT).show();
                             Log.d(HomeActivity.class.getSimpleName(), editText.getText().toString());
+                            // Send new location to server
+                            // Does something and get coordinate back from server
+
+                            // Update the preference
+                            //editor.putFloat(LATITUDE, (float) location.getLatitude());
+                            //editor.putFloat(LONGITUDE, (float) location.getLongitude());
+                            //editor.apply();
+                            
                             getDialog().dismiss();
                             // Refresh the current page
                             Activity activity = getActivity();
