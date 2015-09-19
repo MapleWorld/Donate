@@ -18,6 +18,7 @@ package donate.mudio.co.donate;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -98,13 +99,21 @@ public class LoginActivity extends AppCompatActivity implements
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
+
         // [END create_google_api_client]
+
+        // Inside your Activity class onCreate method
+        SharedPreferences setting = getSharedPreferences(
+                "TicTacToeSample", 0);
+        GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(this,
+                "server:client_id:1-web-app.apps.googleusercontent.com");
     }
 
     private void updateUI(boolean isSignedIn) {
         if (isSignedIn) {
             // Show signed-in user's name
             Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+
             if (currentPerson != null) {
                 String name = currentPerson.getDisplayName();
                 mStatus.setText(getString(R.string.signed_in_fmt, name));

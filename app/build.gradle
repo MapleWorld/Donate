@@ -25,12 +25,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.0'
-
     compile 'com.google.android.gms:play-services-plus:7.8.0'
-
     // UiAutomatorTesting
     androidTestCompile 'com.android.support.test:runner:0.2'
     androidTestCompile 'com.android.support.test:rules:0.2'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.0'
     androidTestCompile 'com.android.support:support-annotations:23.0.0'
+    compile files('libs/endpoints-v1-1.20.0-SNAPSHOT.jar')
 }
