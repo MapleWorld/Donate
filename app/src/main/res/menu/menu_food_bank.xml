@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="donate.mudio.co.donate.HomeActivity">
+    tools:context="donate.mudio.co.donate.FoodBankActivity">
 
     <item android:id="@+id/action_change_location" android:title="@string/action_change_location"
         android:orderInCategory="100" app:showAsAction="never" />

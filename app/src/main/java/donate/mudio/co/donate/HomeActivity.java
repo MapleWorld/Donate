@@ -19,7 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.plus.Plus;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -52,6 +55,9 @@ public class HomeActivity extends AppCompatActivity {
         ((ListView) findViewById(R.id.food_bank)).setAdapter(adapter);
 
         mListView = (ListView) findViewById(R.id.food_bank);
+        TextView listTitle = new TextView(this);
+        listTitle.setText("Nearby Charities:");
+        mListView.addHeaderView(listTitle);
 
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,12 +87,15 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_change_location) {
+        if (id == R.id.action_change_location) {
             UpdateLocationFragment new_location_dialog = new UpdateLocationFragment();
             FragmentManager fm = getSupportFragmentManager();
             new_location_dialog.show(fm, "location_fragment_dialog");
+        } else if(id == R.id.sign_out_button) {
+            if (MainActivity.mGoogleApiClient.isConnected()) {
+                Plus.AccountApi.clearDefaultAccount(MainActivity.mGoogleApiClient);
+                MainActivity.mGoogleApiClient.disconnect();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

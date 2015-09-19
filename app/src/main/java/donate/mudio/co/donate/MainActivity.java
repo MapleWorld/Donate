@@ -34,7 +34,6 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
-
 /**
  * Minimal activity demonstrating basic Google Sign-In.
  */
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String KEY_SHOULD_RESOLVE = "should_resolve";
 
     /* Client for accessing Google APIs */
-    private GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
 
     /* View to display current status (signed-in, signed-out, disconnected, etc) */
     private TextView mStatus;
@@ -109,9 +108,21 @@ public class MainActivity extends AppCompatActivity implements
             if (currentPerson != null) {
                 String name = currentPerson.getDisplayName();
                 mStatus.setText(getString(R.string.signed_in_fmt, name));
+
+                String personName = currentPerson.getDisplayName();
+                String personGooglePlusProfile = currentPerson.getUrl();
+
+                Toast.makeText(this, personName + personGooglePlusProfile, Toast.LENGTH_SHORT).show();
+                // Show the home activity, need the back end for this to work
+                //Intent intent = new Intent(this, HomeActivity.class);
+                //startActivity(intent);
+
             } else {
                 Log.w(TAG, getString(R.string.error_null_person));
                 mStatus.setText(getString(R.string.signed_in_err));
+                // Comment code below if back end if working
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
             }
 
             // Set button visibility
@@ -176,10 +187,7 @@ public class MainActivity extends AppCompatActivity implements
         // establish a service connection to Google Play services.
         Log.d(TAG, "onConnected:" + bundle);
 
-        // Show the signed-in UI
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        //updateUI(true);
+        updateUI(true);
     }
 
     @Override
