@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 public class FoodBankActivity extends AppCompatActivity {
 
@@ -28,13 +27,13 @@ public class FoodBankActivity extends AppCompatActivity {
                 DonateFragment new_donate_dialog = new DonateFragment();
                 FragmentManager fm = getSupportFragmentManager();
                 new_donate_dialog.show(fm, "donate_fragment_dialog");
-                // Send data to server
-                EditText donation_name = (EditText) findViewById(R.id.donation_name);
-                EditText donation_weight = (EditText) findViewById(R.id.donation_weight);
-                EditText donation_number = (EditText) findViewById(R.id.donation_number);
-                String donation_name_string = donation_name.getText().toString();
-                String donation_weight_string = donation_weight.getText().toString();
-                String donation_number_string = donation_number.getText().toString();
+                // Send data to server, code below doesn't work
+                //EditText donation_name = (EditText) findViewById(R.id.donation_name);
+                //EditText donation_weight = (EditText) findViewById(R.id.donation_weight);
+                //EditText donation_number = (EditText) findViewById(R.id.donation_number);
+                //String donation_name_string = donation_name.toString();
+                //String donation_weight_string = donation_weight.getText().toString();
+                //String donation_number_string = donation_number.getText().toString();
                 // Send these data to server
             }
         });

@@ -28,10 +28,6 @@
             android:name=".FoodBankActivity"
             android:label="@string/title_activity_food_bank" >
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
     </application>
 
 </manifest>
