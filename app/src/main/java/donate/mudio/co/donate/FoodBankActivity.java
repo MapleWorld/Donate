@@ -1,6 +1,7 @@
 package donate.mudio.co.donate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +19,9 @@ public class FoodBankActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_bank);
 
-        // Send the food bank name to server to get the info
+        Intent intentN = getIntent();
+        String foodbank_id = intentN.getStringExtra("foodbank_id");
+        // Send the food bank id to server to get the info
         // Show the info in the page
 
         findViewById(R.id.donate_button).setOnClickListener(new View.OnClickListener() {

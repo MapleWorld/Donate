@@ -60,10 +60,33 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), item_name + " is selected ", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(HomeActivity.this, FoodBankActivity.class);
-                intent.putExtra("foodBankName", item_name);
+
+                intent.putExtra("foodbank_id", item_name);
                 startActivity(intent);
             }
         });
+    }
+
+    public void CreateUserProfile(String user_email) {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
+                    Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putFloat(LATITUDE, (float) location.getLatitude());
+            editor.putFloat(LONGITUDE, (float) location.getLongitude());
+            editor.apply();
+
+            ProfileForm user_profile = new ProfileForm();
+            //user_profile.setDisplayName(user_email);
+            //user_profile.setLat(location.getLatitude());
+            //user_profile.setLon(location.getLongitude());
+            //user_profile.setIsAdmin(false);
+
+            //Endpoints endpoints = new Endpoints();
+            //return endpoints.getNearestProfiles();
+        }
     }
 
     @Override
@@ -89,28 +112,6 @@ public class HomeActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void CreateUserProfile(String user_email) {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location != null) {
-            Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
-                    Toast.LENGTH_SHORT).show();
-            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-            editor.putFloat(LATITUDE, (float) location.getLatitude());
-            editor.putFloat(LONGITUDE, (float) location.getLongitude());
-            editor.apply();
-
-            ProfileForm user_profile = new ProfileForm();
-            //user_profile.setDisplayName(user_email);
-            //user_profile.setLat(location.getLatitude());
-            //user_profile.setLon(location.getLongitude());
-            //user_profile.setIsAdmin(false);
-
-            //Endpoints endpoints = new Endpoints();
-            //return endpoints.getNearestProfiles();
-        }
     }
 
     public static class UpdateLocationFragment extends DialogFragment {
