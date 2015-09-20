@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -31,21 +30,15 @@ import com.google.android.gms.common.SignInButton;
 
 import donate.mudio.co.donate.utils.Utils;
 
+
 /**
  * Minimal activity demonstrating basic Google Sign-In.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
-
     private static final int ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION = 2222;
-
-    /* View to display current status (signed-in, signed-out, disconnected, etc) */
-    private TextView mStatus;
-
     private AuthorizationCheckTask mAuthTask;
     private String mEmailAccount;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Start with sign-in button disabled until sign-in either succeeds or fails
         findViewById(R.id.sign_in_button).setEnabled(false);
-
-        // Set up view instances
-        mStatus = (TextView) findViewById(R.id.status);
     }
 
     /*
