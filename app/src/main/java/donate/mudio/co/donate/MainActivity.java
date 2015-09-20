@@ -18,6 +18,9 @@ package donate.mudio.co.donate;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +33,6 @@ import com.google.android.gms.common.SignInButton;
 
 import donate.mudio.co.donate.utils.Utils;
 
-
 /**
  * Minimal activity demonstrating basic Google Sign-In.
  */
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION = 2222;
     private AuthorizationCheckTask mAuthTask;
     private String mEmailAccount;
+
+    private static final String LATITUDE = "LATITUDE";
+    private static final String LONGITUDE = "LONGITUDE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +130,26 @@ public class MainActivity extends AppCompatActivity {
         mAuthTask = new AuthorizationCheckTask();
         mAuthTask.execute(email);
         if (email != null) {
+            this.CreateUserProfile(email);
             Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            //startActivity(intent);
         } else {
             Toast.makeText(this, "Empty Email", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void CreateUserProfile(String user_email) {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
+                    Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putFloat(LATITUDE, (float) location.getLatitude());
+            editor.putFloat(LONGITUDE, (float) location.getLongitude());
+            editor.apply();
+
+            //ProfileForm user_profile = new ProfileForm(user_email, location.getLatitude(), location.getLongitude());
         }
     }
 
