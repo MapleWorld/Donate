@@ -22,8 +22,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appspot.id.app.endpoints.model.ProfileForm;
-
 public class HomeActivity extends AppCompatActivity {
 
     private ListView mListView;
@@ -78,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
             editor.putFloat(LONGITUDE, (float) location.getLongitude());
             editor.apply();
 
-            ProfileForm user_profile = new ProfileForm();
+            //ProfileForm user_profile = new ProfileForm();
             //user_profile.setDisplayName(user_email);
             //user_profile.setLat(location.getLatitude());
             //user_profile.setLon(location.getLongitude());

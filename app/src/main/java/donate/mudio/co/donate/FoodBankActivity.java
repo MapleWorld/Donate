@@ -23,6 +23,9 @@ public class FoodBankActivity extends AppCompatActivity {
         String foodbank_id = intentN.getStringExtra("foodbank_id");
         // Send the food bank id to server to get the info
         // Show the info in the page
+        //
+        //TextView foodbank_info = (TextView) findViewById(R.id.foodbank_info);
+        //foodbank_info.setText("asdsadsadsa");
 
         findViewById(R.id.donate_button).setOnClickListener(new View.OnClickListener() {
             @Override
