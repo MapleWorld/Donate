@@ -40,8 +40,6 @@ public class HomeActivity extends AppCompatActivity {
         String user_email = intentN.getStringExtra("user_email");
 
         this.CreateUserProfile(user_email);
-
-        // Send the gps coordinates to the server
         // Server return a list of food banks nearby
         String[] stringData = {"a", "b", "c"};
 
@@ -104,14 +102,14 @@ public class HomeActivity extends AppCompatActivity {
             editor.putFloat(LONGITUDE, (float) location.getLongitude());
             editor.apply();
 
-            //
             ProfileForm user_profile = new ProfileForm();
-            //Endpoints end_point = new Endpoints();
             //user_profile.setDisplayName(user_email);
             //user_profile.setLat(location.getLatitude());
             //user_profile.setLon(location.getLongitude());
             //user_profile.setIsAdmin(false);
-            //
+
+            //Endpoints endpoints = new Endpoints();
+            //return endpoints.getNearestProfiles();
         }
     }
 
