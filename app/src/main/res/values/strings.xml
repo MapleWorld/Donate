@@ -3,6 +3,10 @@
     <string name="title_text">Google Sign-In\nQuickstart</string>
 
     <!-- Sign-in status messages -->
+    <string name="donate_button">Donate</string>
+    <string name="day">day</string>
+    <string name="month">month</string>
+    <string name="year">year</string>
     <string name="signed_in_fmt">Signed in as: %s</string>
     <string name="signing_in">Signing in…</string>
     <string name="signed_out">Signed out</string>

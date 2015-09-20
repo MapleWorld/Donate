@@ -19,5 +19,4 @@
         android:text="Change"
         android:id="@+id/update_location_button" />
 
-
 </LinearLayout>

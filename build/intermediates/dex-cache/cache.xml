@@ -2,11 +2,32 @@
 <items version="2" >
 
     <item
-        jar="D:\Donate\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jar="D:\Donate\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
-        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\classes-aa6db6cb098f65afa8708fd34d21ba0a9dfa8a9a.jar" />
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\classes-a059b7ca3e7fc5f36d50fc961edfad5118ee710d.jar" />
+    </item>
+    <item
+        jar="D:\Donate\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-c89d9631313e46686508939f65d4354e8a25dd6b.jar" />
+    </item>
+    <item
+        jar="D:\Donate\app\libs\endpoints-v1-1.20.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ff9ff346125de441378ec0ae9002a9389bf07fac">
+        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\endpoints-v1-1.20.0-SNAPSHOT-599b1c09819456dc5140fb2f9b36d08cfe319c90.jar" />
+    </item>
+    <item
+        jar="C:\Users\Lonel\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-7e8493e3cc95f6369be56db69e34b9cb7daf5172.jar" />
     </item>
     <item
         jar="D:\Donate\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.8.0\jars\classes.jar"
@@ -23,32 +44,11 @@
         <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\classes-337f1559c5a69c117ada3eaac78c70ef94adbe52.jar" />
     </item>
     <item
-        jar="D:\Donate\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
+        jar="D:\Donate\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
-        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\classes-a059b7ca3e7fc5f36d50fc961edfad5118ee710d.jar" />
-    </item>
-    <item
-        jar="C:\Users\Lonel\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
-        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-7e8493e3cc95f6369be56db69e34b9cb7daf5172.jar" />
-    </item>
-    <item
-        jar="D:\Donate\app\libs\endpoints-v1-1.20.0-SNAPSHOT.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="ff9ff346125de441378ec0ae9002a9389bf07fac">
-        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\endpoints-v1-1.20.0-SNAPSHOT-599b1c09819456dc5140fb2f9b36d08cfe319c90.jar" />
-    </item>
-    <item
-        jar="D:\Donate\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
-        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-c89d9631313e46686508939f65d4354e8a25dd6b.jar" />
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\classes-aa6db6cb098f65afa8708fd34d21ba0a9dfa8a9a.jar" />
     </item>
 
 </items>
