@@ -2,6 +2,9 @@ package donate.mudio.co.donate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -19,14 +22,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appspot.id.app.endpoints.model.ProfileForm;
+
 public class HomeActivity extends AppCompatActivity {
 
     private ListView mListView;
+
+    private static final String LATITUDE = "LATITUDE";
+    private static final String LONGITUDE = "LONGITUDE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Intent intentN = getIntent();
+        String user_email = intentN.getStringExtra("user_email");
+
+        this.CreateUserProfile(user_email);
 
         // Send the gps coordinates to the server
         // Server return a list of food banks nearby
@@ -78,6 +91,28 @@ public class HomeActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void CreateUserProfile(String user_email) {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            Toast.makeText(this, location.getLatitude() + ", " + location.getLongitude(),
+                    Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putFloat(LATITUDE, (float) location.getLatitude());
+            editor.putFloat(LONGITUDE, (float) location.getLongitude());
+            editor.apply();
+
+            //
+            ProfileForm user_profile = new ProfileForm();
+            //Endpoints end_point = new Endpoints();
+            //user_profile.setDisplayName(user_email);
+            //user_profile.setLat(location.getLatitude());
+            //user_profile.setLon(location.getLongitude());
+            //user_profile.setIsAdmin(false);
+            //
+        }
     }
 
     public static class UpdateLocationFragment extends DialogFragment {

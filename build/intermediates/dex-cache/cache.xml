@@ -19,7 +19,7 @@
         jar="D:\Donate\app\libs\endpoints-v1-1.20.0-SNAPSHOT.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="ff9ff346125de441378ec0ae9002a9389bf07fac">
+        sha1="f1eef347d3b41edb45d304859e91e85a76cde2d5">
         <dex dex="D:\Donate\app\build\intermediates\pre-dexed\debug\endpoints-v1-1.20.0-SNAPSHOT-599b1c09819456dc5140fb2f9b36d08cfe319c90.jar" />
     </item>
     <item
