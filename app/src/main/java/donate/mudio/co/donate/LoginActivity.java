@@ -15,72 +15,43 @@ package donate.mudio.co.donate;
  * limitations under the License.
  */
 
-import android.content.DialogInterface;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.Scopes;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
+
+import donate.mudio.co.donate.utils.Utils;
 
 /**
  * Minimal activity demonstrating basic Google Sign-In.
  */
-public class LoginActivity extends AppCompatActivity implements
-        View.OnClickListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "LoginActivity";
 
-    /* RequestCode for resolutions involving sign-in */
-    private static final int RC_SIGN_IN = 9001;
-
-    /* Keys for persisting instance variables in savedInstanceState */
-    private static final String KEY_IS_RESOLVING = "is_resolving";
-    private static final String KEY_SHOULD_RESOLVE = "should_resolve";
-
-    /* Client for accessing Google APIs */
-    public static GoogleApiClient mGoogleApiClient;
+    private static final int ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION = 2222;
 
     /* View to display current status (signed-in, signed-out, disconnected, etc) */
     private TextView mStatus;
 
-    /* Is there a ConnectionResult resolution in progress? */
-    private boolean mIsResolving = false;
+    private AuthorizationCheckTask mAuthTask;
+    private String mEmailAccount;
 
-    /* Should we automatically resolve ConnectionResults when possible? */
-    private boolean mShouldResolve = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // Restore from saved instance state
-        // [START restore_saved_instance_state]
-        if (savedInstanceState != null) {
-            mIsResolving = savedInstanceState.getBoolean(KEY_IS_RESOLVING);
-            mShouldResolve = savedInstanceState.getBoolean(KEY_SHOULD_RESOLVE);
-        }
-        // [END restore_saved_instance_state]
-
-        // Set up button click listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+        mEmailAccount = Utils.getEmailAccount(this);
 
         // Large sign-in
         ((SignInButton) findViewById(R.id.sign_in_button)).setSize(SignInButton.SIZE_WIDE);
@@ -90,212 +61,117 @@ public class LoginActivity extends AppCompatActivity implements
 
         // Set up view instances
         mStatus = (TextView) findViewById(R.id.status);
-
-        // [START create_google_api_client]
-        // Build GoogleApiClient with access to basic profile
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .build();
-
-        // [END create_google_api_client]
-
-        // Inside your Activity class onCreate method
-        SharedPreferences setting = getSharedPreferences(
-                "TicTacToeSample", 0);
-        GoogleAccountCredential credential = GoogleAccountCredential.usingAudience(this,
-                "server:client_id:1-web-app.apps.googleusercontent.com");
     }
 
-    private void updateUI(boolean isSignedIn) {
-        if (isSignedIn) {
-            // Show signed-in user's name
-            Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-
-            if (currentPerson != null) {
-                String name = currentPerson.getDisplayName();
-                mStatus.setText(getString(R.string.signed_in_fmt, name));
-
-                String personName = currentPerson.getDisplayName();
-                String personGooglePlusProfile = currentPerson.getUrl();
-
-                Toast.makeText(this, personName + personGooglePlusProfile, Toast.LENGTH_SHORT).show();
-                // Show the home activity, need the back end for this to work
-                //Intent intent = new Intent(this, HomeActivity.class);
-                //startActivity(intent);
-
-            } else {
-                Log.w(TAG, getString(R.string.error_null_person));
-                mStatus.setText(getString(R.string.signed_in_err));
-                // Comment code below if back end if working
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            }
-
-            // Set button visibility
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            // Show signed-out message
-            mStatus.setText(R.string.signed_out);
-
-            // Set button visibility
-            findViewById(R.id.sign_in_button).setEnabled(true);
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+    /*
+    * Selects an account for talking to Google Play services. If there is more than one account on
+    * the device, it allows user to choose one.
+    */
+    private void selectAccount() {
+        Account[] accounts = Utils.getGoogleAccounts(this);
+        int numOfAccount = accounts.length;
+        switch (numOfAccount) {
+            case 0:
+                // No accounts registered, nothing to do.
+                Toast.makeText(this, "No accounts registered",
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 1:
+                mEmailAccount = accounts[0].name;
+                performAuthCheck(mEmailAccount);
+                break;
+            default:
+                // More than one Google Account is present, a chooser is necessary.
+                // Invoke an {@code Intent} to allow the user to select a Google account.
+                Intent accountSelector = AccountPicker.newChooseAccountIntent(null, null,
+                        new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false,
+                        "Select account for sign in", null, null, null);
+                startActivityForResult(accountSelector, ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION);
         }
     }
 
-    // [START on_start_on_stop]
     @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+    protected void onResume() {
+        super.onResume();
+
+        if(null != mEmailAccount)
+            performAuthCheck(mEmailAccount);
+        else
+            selectAccount();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mAuthTask != null){
+            mAuthTask.cancel(true);
+            mAuthTask = null;
+        }
     }
-    // [END on_start_on_stop]
 
-    // [START on_save_instance_state]
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_IS_RESOLVING, mIsResolving);
-        outState.putBoolean(KEY_SHOULD_RESOLVE, mShouldResolve);
-    }
-    // [END on_save_instance_state]
-
-    // [START on_activity_result]
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
 
-        if (requestCode == RC_SIGN_IN) {
-            // If the error resolution was not successful we should not resolve further errors.
-            if (resultCode != RESULT_OK) {
-                mShouldResolve = false;
+        if (requestCode == ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION && resultCode == RESULT_OK) {
+            // This path indicates the account selection activity resulted in the user selecting a
+            // Google account and clicking OK.
+            mEmailAccount = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        } else {
+            finish();
+        }
+    }
+
+    /*
+     * Schedule the authorization check.
+     */
+    private void performAuthCheck(String email) {
+        // Cancel previously running tasks.
+        if (mAuthTask != null) {
+            mAuthTask.cancel(true);
+        }
+
+        // Start task to check authorization.
+        mAuthTask = new AuthorizationCheckTask();
+        mAuthTask.execute(email);
+        if (email != null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Empty Email", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class AuthorizationCheckTask extends AsyncTask<String, Integer, Boolean>{
+        private final static boolean SUCCESS = true;
+        private final static boolean FAILURE = false;
+
+        @Override
+        protected void onPreExecute() {
+            mAuthTask  = this;
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... emailAccounts) {
+            if(!Utils.checkGooglePlayServicesAvailable(LoginActivity.this)){
+                return FAILURE;
             }
 
-            mIsResolving = false;
-            mGoogleApiClient.connect();
-        }
-    }
-    // [END on_activity_result]
+            String emailAccount = emailAccounts[0];
+            mAuthTask = this;
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        // onConnected indicates that an account was selected on the device, that the selected
-        // account has granted any requested permissions to our app and that we were able to
-        // establish a service connection to Google Play services.
-        Log.d(TAG, "onConnected:" + bundle);
+            if(TextUtils.isEmpty(emailAccount)) return FAILURE;
 
-        updateUI(true);
-    }
+            mEmailAccount = emailAccount;
+            Utils.saveEmailAccount(LoginActivity.this, emailAccount);
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        // The connection to Google Play services was lost. The GoogleApiClient will automatically
-        // attempt to re-connect. Any UI elements that depend on connection to Google APIs should
-        // be hidden or disabled until onConnected is called again.
-        Log.w(TAG, "onConnectionSuspended:" + i);
-    }
-
-    // [START on_connection_failed]
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // Could not connect to Google Play Services.  The user needs to select an account,
-        // grant permissions or resolve an error in order to sign in. Refer to the javadoc for
-        // ConnectionResult to see possible error codes.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-
-        if (!mIsResolving && mShouldResolve) {
-            if (connectionResult.hasResolution()) {
-                try {
-                    connectionResult.startResolutionForResult(this, RC_SIGN_IN);
-                    mIsResolving = true;
-                } catch (IntentSender.SendIntentException e) {
-                    Log.e(TAG, "Could not resolve ConnectionResult.", e);
-                    mIsResolving = false;
-                    mGoogleApiClient.connect();
-                }
-            } else {
-                // Could not resolve the connection result, show the user an
-                // error dialog.
-                showErrorDialog(connectionResult);
-            }
-        } else {
-            // Show the signed-out UI
-            updateUI(false);
-        }
-    }
-    // [END on_connection_failed]
-
-    private void showErrorDialog(ConnectionResult connectionResult) {
-        int errorCode = connectionResult.getErrorCode();
-
-        if (GooglePlayServicesUtil.isUserRecoverableError(errorCode)) {
-            // Show the default Google Play services error dialog which may still start an intent
-            // on our behalf if the user can resolve the issue.
-            GooglePlayServicesUtil.getErrorDialog(errorCode, this, RC_SIGN_IN,
-                    new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            mShouldResolve = false;
-                            updateUI(false);
-                        }
-                    }).show();
-        } else {
-            // No default Google Play Services error, display a message to the user.
-            String errorString = getString(R.string.play_services_error_fmt, errorCode);
-            Toast.makeText(this, errorString, Toast.LENGTH_SHORT).show();
-
-            mShouldResolve = false;
-            updateUI(false);
+            return SUCCESS;
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                // User clicked the sign-in button, so begin the sign-in process and automatically
-                // attempt to resolve any errors that occur.
-                mStatus.setText(R.string.signing_in);
-                // [START sign_in_clicked]
-                mShouldResolve = true;
-                mGoogleApiClient.connect();
-                // [END sign_in_clicked]
-                break;
-            case R.id.sign_out_button:
-                // Clear the default account so that GoogleApiClient will not automatically
-                // connect in the future.
-                // [START sign_out_clicked]
-                if (mGoogleApiClient.isConnected()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    mGoogleApiClient.disconnect();
-                }
-                // [END sign_out_clicked]
-                updateUI(false);
-                break;
-            case R.id.disconnect_button:
-                // Revoke all granted permissions and clear the default account.  The user will have
-                // to pass the consent screen to sign in again.
-                // [START disconnect_clicked]
-                if (mGoogleApiClient.isConnected()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
-                    mGoogleApiClient.disconnect();
-                }
-                // [END disconnect_clicked]
-                updateUI(false);
-                break;
-        }
-    }
 }

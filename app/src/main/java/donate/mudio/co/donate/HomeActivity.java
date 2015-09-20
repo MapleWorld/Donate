@@ -22,8 +22,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.plus.Plus;
-
 public class HomeActivity extends AppCompatActivity {
 
     private static final String LATITUDE = "LATITUDE";
@@ -92,10 +90,7 @@ public class HomeActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             new_location_dialog.show(fm, "location_fragment_dialog");
         } else if(id == R.id.sign_out_button) {
-            if (LoginActivity.mGoogleApiClient.isConnected()) {
-                Plus.AccountApi.clearDefaultAccount(LoginActivity.mGoogleApiClient);
-                LoginActivity.mGoogleApiClient.disconnect();
-            }
+
         }
         return super.onOptionsItemSelected(item);
     }
